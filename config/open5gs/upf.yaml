@@ -1,0 +1,29 @@
+logger:
+  file:
+    path: /opt/open5gs/var/log/open5gs/upf.log
+
+  level: info
+upf:
+  pfcp:
+    server:
+    - dev: eth0
+  gtpu:
+    server:
+    - dev: eth0
+  session:
+    - subnet: 10.45.0.0/16
+      gateway: 10.45.0.1
+      dnn: internet
+    - subnet: 10.46.0.0/16
+      gateway: 10.46.0.1
+      dnn: ims
+    - subnet: 2001:db8:cafe::/48
+      gateway: 2001:db8:cafe::1
+      dnn: internet
+    - subnet: 2001:db8:cafe:1::/48
+      gateway: 2001:db8:cafe:1::1
+      dnn: ims
+  metrics:
+    server:
+    - dev: eth0
+      port: 9090
