@@ -1,0 +1,208 @@
+services:
+  mongo:
+    image: ghcr.io/nss-network/mongo:4.4.13
+    container_name: mongo
+    environment:
+      MONGO_INITDB_DATABASE: open5gs
+    volumes:
+      - mongodbdata:/data/db
+    command: mongod --bind_ip 0.0.0.0
+    restart: on-failure
+    networks:
+      default:
+        ipv4_address: 10.10.0.2
+
+  webui:
+    image: ghcr.io/nss-network/open5gs-webui:2.7.6
+    container_name: webui
+    depends_on:
+      - mongo
+    environment:
+      - DB_URI=mongodb://mongo/open5gs
+      - NODE_ENV=dev
+    ports:
+      - "3000:9999/tcp"
+    restart: on-failure
+    networks:
+      default:
+        ipv4_address: 10.10.0.3
+
+  nrf:
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    entrypoint: /entrypoint_open5gs.sh
+    command: open5gs-nrfd
+    container_name: nrf
+    volumes:
+      - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
+      - ./config/open5gs/nrf.yaml:/opt/open5gs/etc/open5gs/nrf.yaml
+    restart: on-failure
+    networks:
+      default:
+        ipv4_address: 10.10.0.10
+
+  ausf:
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    entrypoint: /entrypoint_open5gs.sh
+    command: open5gs-ausfd
+    container_name: ausf
+    depends_on:
+      - nrf
+    volumes:
+      - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
+      - ./config/open5gs/ausf.yaml:/opt/open5gs/etc/open5gs/ausf.yaml
+    restart: on-failure
+    networks:
+      default:
+        ipv4_address: 10.10.0.11
+
+  udm:
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    entrypoint: /entrypoint_open5gs.sh
+    command: open5gs-udmd
+    container_name: udm
+    depends_on:
+      - nrf
+    volumes:
+      - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
+      - ./config/open5gs/udm.yaml:/opt/open5gs/etc/open5gs/udm.yaml
+    restart: on-failure
+    networks:
+      default:
+        ipv4_address: 10.10.0.12
+
+  udr:
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    entrypoint: /entrypoint_open5gs.sh
+    command: open5gs-udrd
+    container_name: udr
+    depends_on:
+      - mongo
+      - nrf
+    environment:
+      - DB_URI=mongodb://mongo/open5gs
+    volumes:
+      - ./config/open5gs/udr.yaml:/opt/open5gs/etc/open5gs/udr.yaml
+      - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
+    restart: on-failure
+    networks:
+      default:
+        ipv4_address: 10.10.0.13
+
+  pcf:
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    entrypoint: /entrypoint_open5gs.sh
+    command: open5gs-pcfd
+    container_name: pcf
+    depends_on:
+      - mongo
+      - nrf
+    environment:
+      - DB_URI=mongodb://mongo/open5gs
+    volumes:
+      - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
+      - ./config/open5gs/pcf.yaml:/opt/open5gs/etc/open5gs/pcf.yaml
+    restart: on-failure
+    networks:
+      default:
+        ipv4_address: 10.10.0.14
+
+  nssf:
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    entrypoint: /entrypoint_open5gs.sh
+    command: open5gs-nssfd
+    container_name: nssf
+    depends_on:
+      - nrf
+    volumes:
+      - ./config/open5gs/nssf.yaml:/opt/open5gs/etc/open5gs/nssf.yaml
+      - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
+    restart: on-failure
+    networks:
+      default:
+        ipv4_address: 10.10.0.15
+
+
+  bsf:
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    entrypoint: /entrypoint_open5gs.sh
+    command: open5gs-bsfd
+    container_name: bsf
+    depends_on:
+      - nrf
+    volumes:
+      - ./config/open5gs/bsf.yaml:/opt/open5gs/etc/open5gs/bsf.yaml
+      - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
+    restart: on-failure
+    networks:
+      default:
+        ipv4_address: 10.10.0.16
+  amf:
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    entrypoint: /entrypoint_open5gs.sh
+    command: open5gs-amfd
+    container_name: amf
+    depends_on:
+      - nrf
+      - ausf
+      - udm
+      - nssf
+    volumes:
+      - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
+      - ./config/open5gs/amf.yaml:/opt/open5gs/etc/open5gs/amf.yaml
+    ports:
+      - "38412:38412/sctp"
+    restart: on-failure
+    networks:
+      default:
+        ipv4_address: 10.10.0.1
+
+  smf:
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    entrypoint: /entrypoint_open5gs.sh
+    command: open5gs-smfd
+    container_name: smf
+    depends_on:
+      - nrf
+      - pcf
+      - amf
+    volumes:
+      - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
+      - ./config/open5gs/smf.yaml:/opt/open5gs/etc/open5gs/smf.yaml
+    restart: on-failure
+    networks:
+      default:
+        ipv4_address: 10.10.0.21
+
+  upf:
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    entrypoint: /entrypoint_open5gs.sh
+    command: open5gs-upfd
+    container_name: upf
+    user: root
+    depends_on:
+      - smf
+    volumes:
+      - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
+      - ./config/open5gs/upf.yaml:/opt/open5gs/etc/open5gs/upf.yaml
+    cap_add:
+      - all
+    privileged: true
+    sysctls:
+      - net.ipv4.ip_forward=1
+    restart: on-failure
+    networks:
+      default:
+        ipv4_address: 10.10.0.22
+
+networks:
+  default:
+    driver_opts:
+      com.docker.network.bridge.name: br-core-ran
+    ipam:
+      config:
+        - subnet: 10.10.0.0/24
+          gateway: 10.10.0.100
+
+volumes:
+  mongodbdata: {}
+
