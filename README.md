@@ -163,4 +163,4 @@ docker compose logs -f upf
 
 Built from [Open5GS](https://github.com/open5gs/open5gs) v2.8.0 (Apache-2.0)
 
-Maintained by NSS Network — Email: th2026.opensource@gmail.com, Tel: +66 81 597 0262 — 5G Private Network research project
+Maintained by NSS Network — Email: th2026.opensource@gmail.com, Tel: +66 81 597 0262<br>5G Private Network research project
