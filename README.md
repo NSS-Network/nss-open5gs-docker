@@ -129,4 +129,4 @@ docker compose logs -f upf
 
 Build จาก [Open5GS](https://github.com/open5gs/open5gs) v2.8.0 (Apache-2.0)
 
-จัดทำโดย NSS Network — โครงการวิจัย 5G Private Network 
+จัดทำโดย NSS Network ,Email:th2026.opensource@gmail.com , Tel +66815970262  — โครงการวิจัย 5G Private Network 
