@@ -1,4 +1,4 @@
-# NSS Open5GS Docker (v2.8.0)
+ Open5GS Docker (v2.8.0)
 
 A 5G Core Network (Open5GS v2.8.0) Docker Compose deployment for the NSS Lab — built from source (not a pre-built image), with a NAT/iptables fix so UEs can reach the internet.
 
@@ -42,6 +42,21 @@ This project is part of the **5G Private Network from Open Source** research pro
 | WebUI | 10.10.0.3 | Web console for subscriber management (port 3000) |
 
 **PLMN**: MCC=001, MNC=01 · **TAC**: 1 · **UE Subnet**: `10.45.0.0/16` (internet), `10.46.0.0/16` (ims)
+
+## Requesting Access
+
+The container images (`ghcr.io/nss-network/...`) used by this repo are currently **private**. To `docker pull` or `docker compose up`, you need read access to the NSS-Network GitHub Container Registry.
+
+Please contact us to request access:
+
+- **Email**: th2026.opensource@gmail.com
+- **Tel**: +66 81 597 0262
+
+Once access is granted, log in to the registry before pulling:
+
+```bash
+docker login ghcr.io -u <your-github-username>
+```
 
 ## Prerequisites
 
@@ -148,4 +163,4 @@ docker compose logs -f upf
 
 Built from [Open5GS](https://github.com/open5gs/open5gs) v2.8.0 (Apache-2.0)
 
-Maintained by NSS Network — 5G Private Network research project.
+Maintained by NSS Network — Email: th2026.opensource@gmail.com, Tel: +66 81 597 0262 — 5G Private Network research project
