@@ -2,7 +2,7 @@
 
 5G Core Network (Open5GS v2.8.0) แบบ Docker Compose สำหรับ NSS Lab — build จาก source เอง (ไม่ใช่ image สำเร็จรูป) พร้อม NAT/iptables fix สำหรับ UE ที่จะออก internet ได้จริง
 
-โปรเจกต์นี้เป็นส่วนหนึ่งของโครงการวิจัย **5G Private Network จาก Open Source** (ทุนวิจัย บพข.) โดย Trinergy Comm-THA ร่วมกับ KMUTNB, NT และ iService Networks
+โปรเจกต์นี้เป็นส่วนหนึ่งของโครงการวิจัย **5G Private Network จาก Open Source** โดย NSS-Network ร่วมกับ KMUTNB , Five Access Systems Co,Ltd.
 
 > หมายเหตุ: repo นี้มีเฉพาะส่วน **5G Core** เท่านั้น ยังไม่รวม RAN (OAI/OCUDU CU-CP/CU-UP/DU) ซึ่งต้องมีฮาร์ดแวร์ SDR จริงถึงจะรันได้ครบ
 
