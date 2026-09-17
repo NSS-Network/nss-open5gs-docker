@@ -28,7 +28,7 @@ services:
         ipv4_address: 10.10.0.3
 
   nrf:
-    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0:2.8.0
     entrypoint: /entrypoint_open5gs.sh
     command: open5gs-nrfd
     container_name: nrf
@@ -41,7 +41,7 @@ services:
         ipv4_address: 10.10.0.10
 
   ausf:
-    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0:2.8.0
     entrypoint: /entrypoint_open5gs.sh
     command: open5gs-ausfd
     container_name: ausf
@@ -56,7 +56,7 @@ services:
         ipv4_address: 10.10.0.11
 
   udm:
-    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0:2.8.0
     entrypoint: /entrypoint_open5gs.sh
     command: open5gs-udmd
     container_name: udm
@@ -71,7 +71,7 @@ services:
         ipv4_address: 10.10.0.12
 
   udr:
-    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0:2.8.0
     entrypoint: /entrypoint_open5gs.sh
     command: open5gs-udrd
     container_name: udr
@@ -89,7 +89,7 @@ services:
         ipv4_address: 10.10.0.13
 
   pcf:
-    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0:2.8.0
     entrypoint: /entrypoint_open5gs.sh
     command: open5gs-pcfd
     container_name: pcf
@@ -107,7 +107,7 @@ services:
         ipv4_address: 10.10.0.14
 
   nssf:
-    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0:2.8.0
     entrypoint: /entrypoint_open5gs.sh
     command: open5gs-nssfd
     container_name: nssf
@@ -123,7 +123,7 @@ services:
 
 
   bsf:
-    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0:2.8.0
     entrypoint: /entrypoint_open5gs.sh
     command: open5gs-bsfd
     container_name: bsf
@@ -137,7 +137,7 @@ services:
       default:
         ipv4_address: 10.10.0.16
   amf:
-    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0:2.8.0
     entrypoint: /entrypoint_open5gs.sh
     command: open5gs-amfd
     container_name: amf
@@ -157,7 +157,7 @@ services:
         ipv4_address: 10.10.0.1
 
   smf:
-    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0:2.8.0
     entrypoint: /entrypoint_open5gs.sh
     command: open5gs-smfd
     container_name: smf
@@ -174,7 +174,7 @@ services:
         ipv4_address: 10.10.0.21
 
   upf:
-    image: ghcr.io/nss-network/nss-open5gs-v2.8.0
+    image: ghcr.io/nss-network/nss-open5gs-v2.8.0:2.8.0
     entrypoint: /entrypoint_open5gs.sh
     command: open5gs-upfd
     container_name: upf
