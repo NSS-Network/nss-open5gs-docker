@@ -1,6 +1,6 @@
 logger:
   file:
-    path: /opt/open5gs/var/log/open5gs/bsf.log
+    path: /usr/local/var/log/open5gs/bsf.log
   level: info
 
 global:

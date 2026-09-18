@@ -34,7 +34,7 @@ services:
     container_name: nrf
     volumes:
       - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
-      - ./config/open5gs/nrf.yaml:/opt/open5gs/etc/open5gs/nrf.yaml
+      - ./config/open5gs/nrf.yaml:/usr/local/etc/open5gs/nrf.yaml
     restart: on-failure
     networks:
       default:
@@ -49,7 +49,7 @@ services:
       - nrf
     volumes:
       - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
-      - ./config/open5gs/ausf.yaml:/opt/open5gs/etc/open5gs/ausf.yaml
+      - ./config/open5gs/ausf.yaml:/usr/local/etc/open5gs/ausf.yaml
     restart: on-failure
     networks:
       default:
@@ -64,7 +64,7 @@ services:
       - nrf
     volumes:
       - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
-      - ./config/open5gs/udm.yaml:/opt/open5gs/etc/open5gs/udm.yaml
+      - ./config/open5gs/udm.yaml:/usr/local/etc/open5gs/udm.yaml
     restart: on-failure
     networks:
       default:
@@ -81,7 +81,7 @@ services:
     environment:
       - DB_URI=mongodb://mongo/open5gs
     volumes:
-      - ./config/open5gs/udr.yaml:/opt/open5gs/etc/open5gs/udr.yaml
+      - ./config/open5gs/udr.yaml:/usr/local/etc/open5gs/udr.yaml
       - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
     restart: on-failure
     networks:
@@ -100,7 +100,7 @@ services:
       - DB_URI=mongodb://mongo/open5gs
     volumes:
       - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
-      - ./config/open5gs/pcf.yaml:/opt/open5gs/etc/open5gs/pcf.yaml
+      - ./config/open5gs/pcf.yaml:/usr/local/etc/open5gs/pcf.yaml
     restart: on-failure
     networks:
       default:
@@ -114,7 +114,7 @@ services:
     depends_on:
       - nrf
     volumes:
-      - ./config/open5gs/nssf.yaml:/opt/open5gs/etc/open5gs/nssf.yaml
+      - ./config/open5gs/nssf.yaml:/usr/local/etc/open5gs/nssf.yaml
       - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
     restart: on-failure
     networks:
@@ -130,7 +130,7 @@ services:
     depends_on:
       - nrf
     volumes:
-      - ./config/open5gs/bsf.yaml:/opt/open5gs/etc/open5gs/bsf.yaml
+      - ./config/open5gs/bsf.yaml:/usr/local/etc/open5gs/bsf.yaml
       - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
     restart: on-failure
     networks:
@@ -148,7 +148,7 @@ services:
       - nssf
     volumes:
       - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
-      - ./config/open5gs/amf.yaml:/opt/open5gs/etc/open5gs/amf.yaml
+      - ./config/open5gs/amf.yaml:/usr/local/etc/open5gs/amf.yaml
     ports:
       - "38412:38412/sctp"
     restart: on-failure
@@ -162,12 +162,17 @@ services:
     command: open5gs-smfd
     container_name: smf
     depends_on:
-      - nrf
-      - pcf
-      - amf
+      nrf:
+        condition: service_started
+      pcf:
+        condition: service_started
+      amf:
+        condition: service_started
+      upf:
+        condition: service_healthy
     volumes:
       - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
-      - ./config/open5gs/smf.yaml:/opt/open5gs/etc/open5gs/smf.yaml
+      - ./config/open5gs/smf.yaml:/usr/local/etc/open5gs/smf.yaml
     restart: on-failure
     networks:
       default:
@@ -179,11 +184,15 @@ services:
     command: open5gs-upfd
     container_name: upf
     user: root
-    depends_on:
-      - smf
+    healthcheck:
+      test: ["CMD-SHELL", "ss -uln | grep -q ':8805'"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
     volumes:
       - ./config/open5gs/entrypoint_open5gs.sh:/entrypoint_open5gs.sh
-      - ./config/open5gs/upf.yaml:/opt/open5gs/etc/open5gs/upf.yaml
+      - ./config/open5gs/upf.yaml:/usr/local/etc/open5gs/upf.yaml
     cap_add:
       - all
     privileged: true

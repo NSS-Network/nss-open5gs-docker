@@ -36,5 +36,7 @@ if [[ "$COMMAND" == *"open5gs-upfd" ]]; then
     tun_create
 fi
 
+mkdir -p /usr/local/var/log/open5gs
+
 $@
 exit 1
